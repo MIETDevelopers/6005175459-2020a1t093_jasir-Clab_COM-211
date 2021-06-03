@@ -1,50 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 int main()
 {
-    int n, querry, extend,i;
-
-    printf("Enter n\n");
-    scanf("%d", &n);
-    int *arr = (int *)calloc(n, sizeof(int));
-
-    for ( i = 0; i < n; i++)
+    int *arr;
+    int i, number ,query;
+    printf("size of array: \n");
+    scanf(" %d", &number); 
+    arr = (int *)malloc(number*sizeof(int));
+    for (i = 0; i < number; ++i)
     {
-        arr[i] = i + 1;
+        printf("Enter the arrays:arr[%d]\n", i);
+        scanf(" %d", (arr+i));
     }
-    for ( i = 0; i < n; i++)
+    for (i = 0; i < number; ++i)
     {
-        printf("%d\n", arr[i]);
+        printf(" showing the arrays : arr[%d] = %d\n", i, *(arr+i));
     }
-    printf("Enter the element you want to search\n");
-    scanf("%d", &querry);
-    for ( i = 0; i < n; ++i)
+    arr = realloc(arr,(number* sizeof(int)+1));
+    printf("enter the new array element : arr[%d]\n", number);
+    scanf(" %d", (arr+number));
+    for (i = 0; i < number+1; ++i)
     {
-        if (arr[i] == querry)
-        {
+        printf(" showing the arrays : arr[%d] = %d\n", i, *(arr+i));
+    }
+   
+    printf("Enter element to search:"); 
+    scanf("%d",&query);
+     
+    for(i=0;i<number+1;++i)
+        if(arr[i]==query)
             break;
-        }
-    }
-    if (i<n+1)
-    {
-        printf("element found on index %d \n", i);
-    }
+     
+    if(i<number+1)
+        printf("Element found at index %d",i); 
     else
-    {
-        printf("Element not found\n");
-    }
-
-    printf("Enter the number of  elements you want to increase:\n");
-    scanf("%d", &extend);
-    arr = realloc(arr, extend * sizeof(int));
-    for ( i = 0; i < n + extend; i++)
-    {
-        arr[i] = i + 1;
-    }
-    for ( i = 0; i < n + extend; i++)
-    {
-        printf("%d\n", arr[i]);
-    }
+        printf("Element not found"); 
+  
     return 0;
 }
