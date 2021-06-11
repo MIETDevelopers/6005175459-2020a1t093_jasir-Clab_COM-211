@@ -1,138 +1,110 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-int insert_in_list_at(int *arr, int item, int size,int insert_at)
-{
-    if(size!=0){
-        arr = realloc(arr,sizeof(int));              
+#include<stdio.h>
+#include<stdlib.h>
+// creating a function for displaying the list i.e an array
+int printArray(int *array, int size){
+    int count, newSizeOfList;
+    for(count=0;count<newSizeOfList;++count){
+        printf("\nlistA[%d] = %d", count, *(array+count));
     }
-    int current;                                          
-    current=arr[insert_at];                               
-    arr[insert_at] = item;
-    for(int i=insert_at+1;i<=size;i++){                          
-        arr[i+1] = current;
-        arr[i]=current;                                     
-        current = arr[i+1];                                
-    }
-    int new_size_of_list=++size;
-    return new_size_of_list;                        
+    return 1;
 }
-int search(int *arr, int item, int size)
-{
-    int i, search_element = 0;
-    for (i = 0; i < size; ++i){
-        if (arr[i] == item){
-            search_element = 1;
-            break;
-        }
+// creating a function to insert element into the list i.e an array
+int insertElementInListAt(int*list, int size, int location, int element){
+    int newSizeOfList,count;
+    list=realloc(list,((size+1)*sizeof(int)));        // Dynamically re-allocate memory using realloc()
+    /* here using for loop to shift the elements to the right,
+    to make space for the element to be inserted,then
+    starting the loop from the last and shifting elements until the required index  */
+    for(count=size;count>=location;count--){
+        list[count] = list[count - 1];
     }
-    if (search_element == 1){
-        return i;
-    }
-
-    return -1;
+    list[location] = element;                            // element inserted is at its required index
+    newSizeOfList = ++size;                        // size of array increased after insertion
+    return newSizeOfList;
 }
-
-int deletion(int *arr, int item, int size){
-    int final;
-    final = search(arr, item, size);
-    if (final == -1){
-        return -1;
-    }
-    for (int i = final + 1; i < size; i++){
-        arr[i - 1] = arr[i];
-    }
-    int new_size_of_list=size;
-    return new_size_of_list - 1;
+// creating a function for deletion of element from the list i.e an array
+int deletion(int*list, int size, int index){
+    int newSizeOfList,count;
+    /* here using for loop to shift the elements to the left,
+    after the deletion of the element from the list to fill up the empty index */
+    for(count=index ;count <= size-1; count++)
+        list[count] = list[count+1];                            // every element is shifted to its left to fill empty index
+    newSizeOfList = --size;                         // size of array reduced after deletion
+    return newSizeOfList;
 }
-
-int print_array(int *arr, int size){
+// creating a function for  searching an element in the list i.e an array
+int linearSearch(int*list, int size, int element){
     int count;
-    for (count=0; count<size; ++count){
-        printf("\narr[%d]=%d",count, *(arr+count));
-    }
-    return (count+1);
-}  
-int new_array(int*arr, int size){
-    int i;
-    for(i=0;i<size;i++){
-        scanf("%d",&arr[i]);
-    }
-    int new_size_of_list=size;
-    return new_size_of_list;
+    /* here for loop is used to search the element traversely,
+    until the element is found */
+    for(count=0 ;count < size; count++)
+        if(list[count]==element)
+            break;
+        if(count < size)
+            printf("\n%d is present at location %d.\n", element, count);
+        else
+            printf("\nElement is not available\n");
+        return -1;
 }
 int main()
 {
-    int choice, size_of_listA = 0, item, final,insert_at;
-    int *listA =  (int *)calloc(1,sizeof(int));
-     printf("\nEnter the size of array:");
-            scanf("%d",&size_of_listA);
-            printf("\nEnter %d items in array:\n",size_of_listA);
-            size_of_listA=new_array(listA, size_of_listA);
-            print_array(listA,size_of_listA);
-            printf("\n");
-
-    do{
-        printf("\nchoose operation\n");
-        printf("\n1. Insert an item\n");
-        printf("\n2. Delete an item\n");
-        printf("\n3. Search An item\n");
-        printf("\n4. Exit \n");
-        printf("\nEnter your choice:");
-        scanf("%d",&choice);
-        switch (choice){
-        case 1:
-            printf("Enter the item you want to insert\n");
-            scanf("%d", &item);
-            printf("Enter te index where you want to insert\n");
-            scanf("%d", &insert_at);
-            if(insert_at>size_of_listA){
-                printf("!!WRONG INPUT!!\n");
-            }
-            size_of_listA = insert_in_list_at(listA, item, size_of_listA,insert_at);
-            printf("\nItem Added at : %d\n",insert_at);
-            printf("Updated array is :\n");
-            print_array(listA, size_of_listA);
-            break;
-        case 2:
-            printf("Enter the item you want to delete\n");
-            printf("Current array is :\n");
-            print_array(listA, size_of_listA);
-            printf("\n");
-            scanf("%d", &item);
-            final = deletion(listA, item, size_of_listA);
-            if (final == -1 || size_of_listA == 0){
-                printf("Element not found\n");
+    int *listA;
+    int count, size, newSizeOfList, index, location, element, operation;
+    /* for convenience element is used in insertion and element is used in linearSearch as both have same meaning,
+    location is used in insertion and index is used in deletion as both have same meaning */
+    printf("How many numbers?\n");
+    scanf(" %d", &size);
+    listA = (int*)malloc(size*sizeof(int));                             //Dynamically allocating memory using malloc()
+    for (count = 0; count < size; ++count)
+    {
+        printf("\nEnter listA[%d]\n", count);
+        scanf(" %d", (listA+count));
+    }
+    for (count = 0; count < size; ++count)
+    {
+        printf("\nlistA[%d] = %d\n", count, *(listA+count));
+    }
+    do
+    {
+        printf("\nChoose any option\n");
+        printf("1. Insertion \n");
+        printf("2. Deletion \n");
+        printf("3. Linear Search \n");
+        printf("4. Exit \n\n");
+        scanf("%d", &operation);
+        switch (operation)
+        {
+            case 1:
+                printf("\nEnter the location where you want to insert the element :\n");
+                scanf("%d",&location);
+                printf("\nEnter the element to be inserted :\n");
+                scanf("%d",&element);
+                newSizeOfList = insertElementInListAt(listA, size, location, element);
+                printArray(listA, newSizeOfList);
+                printf("\n\nElement inserted successfully\n");
                 break;
-            }
-            else{
-                size_of_listA = final;
-                printf("Element is deleted\n");
-            }
-            printf("Updated array:\n");
-            print_array(listA, size_of_listA);
-            break;
-        case 3:
-            printf("Enter the item you want to search:");
-            scanf("%d", &item);
-            final = search(listA, item, size_of_listA);
-            if (final == -1 || size_of_listA == 0)
-                printf("Element not found");
-            else
-                printf("Element found at: %d", final);
-            break;
-        case 4:
-            printf("\npress enter to exit from this program:)");
-            getch();
-            free(listA);
-            exit(0);
-            break;
-        default:
-            printf("!!Wrong input!!");
-            break;
+            case 2:
+                printf("\nEnter the index of the element to be deleted :\n");
+                scanf("%d",&index);
+                newSizeOfList = deletion(listA, size,index);
+                printArray(listA, newSizeOfList);
+                printf("\n\nElement deleted successfully\n\n");
+                break;
+            case 3:
+                printf("\nEnter the element to be searched :\n");
+                scanf("%d",&element);
+                int searchElement = linearSearch(listA, size, element);
+                break;
+            case 4:
+                printf("\nPress any key to exit\n");
+                exit(0);
+                break;
+            default:
+                printf("\nError!\n");
+                break;
         }
-        printf("\nPress Enter to continue\n");
-        getch();
-    } while (1);
+        printf("\nContinue the process\n");
+    }
+    while(1);
     return 0;
 }
